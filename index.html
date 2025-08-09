@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jero Points</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
+  /* Paleta rosa y arcoiris */
+  :root {
+    --rosa: #ff66b2;
+    --rosa-claro: #ffe6f0;
+    --rojo: #ff4d4d;
+    --naranja: #ff9933;
+    --amarillo: #ffcc00;
+    --verde: #33cc66;
+    --celeste: #66ccff;
+    --azul: #3399ff;
+    --lila: #cc99ff;
+    --gris-claro: #f9f9f9;
+    --gris-medio: #ddd;
+    --gris-oscuro: #666;
+  }
+  body {
+    font-family: 'Quicksand', sans-serif;
+    background: var(--rosa-claro);
+    color: #333;
+    margin: 0;
+    padding: 1rem 2rem 3rem 2rem;
+    min-height: 100vh;
+    user-select: none;
+  }
+  h1, h2, h3 {
+    color: var(--rosa);
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+  h1 {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+    text-shadow:
+      1px 1px var(--rojo),
+      2px 2px var(--naranja),
+      3px 3px var(--amarillo),
+      4px 4px var(--verde),
+      5px 5px var(--celeste),
+      6px 6px var(--azul),
+      7px 7px var(--lila);
+  }
+  main {
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow:
+      0 0 8px var(--rosa),
+      0 0 25px var(--lila);
+    padding: 1.5rem 2rem 2rem 2rem;
+  }
+
+  /* Botones */
+  button {
+    background: var(--rosa);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 0.45rem 1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: 0 0 8px var(--rosa);
+    user-select: none;
+  }
+  button:hover, button:focus {
+    background: var(--rojo);
+    outline: none;
+    box-shadow:
+      0 0 15px var(--rojo),
+      0 0 35px var(--naranja);
+  }
+
+  /* Botones info */
+  .btn-info-list {
+    background: linear-gradient(90deg, var(--rojo), var(--naranja), var(--amarillo), var(--verde), var(--celeste), var(--azul), var(--lila));
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: 0 0 12px var(--lila);
+    margin-right: 1rem;
+    user-select:none;
+  }
+  .btn-info-list:hover, .btn-info-list:focus {
+    filter: brightness(1.2);
+  }
+
+  /* Tabla ranking */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.7rem;
+  }
+  caption {
+    text-align: left;
+    font-weight: 700;
+    color: var(--rosa);
+    margin-bottom: 0.3rem;
+  }
+  thead tr {
+    background: linear-gradient(90deg, var(--rojo), var(--naranja), var(--amarillo), var(--verde), var(--celeste), var(--azul), var(--lila));
+    color: white;
+    font-weight: 700;
+  }
+  tbody tr {
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  tbody tr:hover, tbody tr:focus-within {
+    background: var(--rosa-claro);
+  }
+  th, td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--gris-medio);
+    text-align: left;
+  }
+  th:first-child, td:first-child {
+    text-align: center;
+    width: 5%;
+  }
+  th:nth-child(2), td:nth-child(2) {
+    width: 45%;
+  }
+  th:nth-child(3), td:nth-child(3) {
+    width: 20%;
+    text-align: center;
+  }
+
+  /* Medallas de los 3 primeros */
+  .medalla {
+    font-size: 1.3rem;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  .oro {
+    color: #FFD700;
+    text-shadow:
+      1px 1px 2px #b38700;
+  }
+  .plata {
+    color: #C0C0C0;
+    text-shadow:
+      1px 1px 2px #777;
+  }
+  .bronce {
+    color: #cd7f32;
+    text-shadow:
+      1px 1px 2px #7a4f1e;
+  }
+
+  /* Detalle puntos */
+  #detailsSection {
+    margin-top: 1.2rem;
+    background: var(--rosa-claro);
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 0 12px var(--lila);
+  }
+  #detailsBody td, #detailsBody th {
+    padding: 0.4rem 0.8rem;
+  }
+  #detailsBody tr:hover {
+    background: var(--rosa);
+    color: white;
+  }
+  #closeDetailsBtn {
+    margin-top: 0.7rem;
+    background: var(--lila);
+    color: var(--rosa);
+    font-weight: 700;
+  }
+
+  /* Info botones */
+  #pointsInfoList {
+    margin-top: 0.8rem;
+    padding: 0.7rem 1rem;
+    background: var(--rosa-claro);
+    border-radius: 12px;
+    box-shadow: inset 0 0 8px var(--lila);
+    max-height: 180px;
+    overflow-y: auto;
+  }
+
+  /* Oculto y visible */
+  .hidden {
+    display: none !important;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    body {
+      padding: 1rem 1rem 2rem 1rem;
+    }
+    main {
+      padding: 1rem 1rem 1.5rem 1rem;
+    }
+    .btn-info-list {
+      font-size: 0.85rem;
+      margin-bottom: 0.6rem;
+      width: 48%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<main>
+  <h1>Jero Points</h1>
+
+  <section aria-label="Tabla de posiciones de Jero Points">
+    <h2 class="section-title">Ranking de Jero Points ✨</h2>
+    <table aria-describedby="rankingDescription" role="table" style="table-layout:fixed;">
+      <caption id="rankingDescription" class="sr-only">Tabla con nombres de hermanas y sus puntos</caption>
+      <thead>
+        <tr>
+          <th style="width: 5%;">#</th>
+          <th style="width: 45%;">Nombre</th>
+          <th style="width: 20%;">Puntos</th>
+        </tr>
+      </thead>
+      <tbody id="rankingBody" role="rowgroup" aria-live="polite" aria-relevant="all">
+        <!-- Filas dinámicas -->
+      </tbody>
+    </table>
+
+    <div id="detailsSection" class="hidden" aria-live="polite" aria-atomic="true" style="margin-top:1.2rem;">
+      <h3>Detalle de puntos</h3>
+      <table role="table" aria-describedby="detailsDescription" style="table-layout: fixed; width: 100%;">
+        <caption id="detailsDescription" class="sr-only">Detalle de puntos ganados o perdidos por motivo y fecha</caption>
+        <thead>
+          <tr>
+            <th style="width: 25%;">Fecha</th>
+            <th style="width: 15%;">Puntos</th>
+            <th style="width: 60%;">Motivo</th>
+          </tr>
+        </thead>
+        <tbody id="detailsBody">
+          <!-- Detalles dinámicos -->
+        </tbody>
+      </table>
+      <button id="closeDetailsBtn" style="margin-top:0.5rem;">Cerrar detalle</button>
+    </div>
+  </section>
+
+  <div style="margin-top:1.5rem; user-select:none; text-align:center;">
+    <button class="btn-info-list" id="showPointsInfoBtn" aria-expanded="false" aria-controls="pointsInfoList">¿Cómo se ganan puntos?</button>
+    <button class="btn-info-list" id="showPointsLostBtn" aria-expanded="false" aria-controls="pointsInfoList">¿Cómo se pierden puntos?</button>
+    <div id="pointsInfoList" class="points-list hidden" role="region" aria-live="polite" aria-atomic="true" style="margin-top:0.7rem;"></div>
+  </div>
+</main>
+
+<script>
+(() => {
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZWqahF0GquA-2wd__lj92IiS5BXwUvzO5CKZDyJv6V1YvlqzCpUaQZ6hDteHtctlhMw/exec";
+
+  // Estado global y datos predefinidos
+  let data = []; // Array de objetos {nombre, puntos, detalles: [{fecha, puntos, motivo}]}
+  
+  // Los motivos ahora están fijos en el código
+  const puntosGanadosMotivos = [
+    { motivo: "Saber de memoria su parte", puntos: 5 },
+    { motivo: "Exponer bien", puntos: 3 },
+    { motivo: "Actitud positiva", puntos: 2 },
+    { motivo: "Por ayudar a una hermana", puntos: 2 },
+  ];
+  const puntosPerdidosMotivos = [
+    { motivo: "Faltar a reunión sin aviso", puntos: 4 },
+    { motivo: "No preparar tarea", puntos: 3 },
+    { motivo: "Interrumpir a otra hermana", puntos: 1 },
+    { motivo: "Por llegar tarde", puntos: 3 },
+  ];
+
+  // Elementos DOM
+  const rankingBody = document.getElementById("rankingBody");
+  const detailsSection = document.getElementById("detailsSection");
+  const detailsBody = document.getElementById("detailsBody");
+  const closeDetailsBtn = document.getElementById("closeDetailsBtn");
+  const showPointsInfoBtn = document.getElementById("showPointsInfoBtn");
+  const showPointsLostBtn = document.getElementById("showPointsLostBtn");
+  const pointsInfoList = document.getElementById("pointsInfoList");
+
+  // -------------------------------------------------------------
+  // Funciones de Carga de datos desde Google Sheets
+  // -------------------------------------------------------------
+
+  // Cargar todos los datos desde Google Sheets
+  async function loadData() {
+    try {
+      const response = await fetch(SCRIPT_URL);
+      const rawData = await response.json();
+      
+      const processedData = rawData.reduce((acc, row) => {
+        const nombre = row.Nombre;
+        const puntos = Number(row.Puntos);
+        const motivo = row.Motivo;
+        const fecha = row.Fecha;
+        
+        let user = acc.find(u => u.nombre.toLowerCase() === nombre.toLowerCase());
+        if (!user) {
+          user = { nombre: nombre, puntos: 0, detalles: [] };
+          acc.push(user);
+        }
+        user.puntos += puntos;
+        user.detalles.push({ fecha, puntos, motivo });
+        return acc;
+      }, []);
+      
+      data = processedData;
+      
+      renderRanking();
+
+    } catch (error) {
+      console.error('Error al cargar datos desde Google Sheets:', error);
+      alert("No se pudieron cargar los datos desde Google Sheets. Revisa la URL y los permisos.");
+      data = [];
+    }
+  }
+
+  // Renderizar ranking (ordenado)
+  function renderRanking() {
+    // Ordenar descendente por puntos
+    data.sort((a, b) => b.puntos - a.puntos);
+    rankingBody.innerHTML = "";
+    data.forEach((user, i) => {
+      const tr = document.createElement("tr");
+      tr.setAttribute("tabindex", "0");
+      tr.setAttribute("role", "row");
+      tr.dataset.nombre = user.nombre;
+
+      const tdPos = document.createElement("td");
+      tdPos.textContent = i + 1;
+      tdPos.setAttribute("aria-label", "Posición");
+      if (i === 0) tdPos.innerHTML = '<span class="medalla oro">🥇</span>';
+      else if (i === 1) tdPos.innerHTML = '<span class="medalla plata">🥈</span>';
+      else if (i === 2) tdPos.innerHTML = '<span class="medalla bronce">🥉</span>';
+
+      const tdNombre = document.createElement("td");
+      tdNombre.textContent = user.nombre;
+
+      const tdPuntos = document.createElement("td");
+      tdPuntos.textContent = user.puntos;
+      tdPuntos.style.color = user.puntos >= 0 ? 'green' : 'red';
+      if (user.puntos === 0) tdPuntos.style.color = '#666';
+
+      tr.appendChild(tdPos);
+      tr.appendChild(tdNombre);
+      tr.appendChild(tdPuntos);
+
+      rankingBody.appendChild(tr);
+    });
+  }
+
+  // Mostrar detalle puntos al hacer click en fila ranking
+  rankingBody.addEventListener("click", (e) => {
+    let tr = e.target.closest("tr");
+    if (!tr) return;
+    const nombre = tr.dataset.nombre;
+    if (!nombre) return;
+    showDetails(nombre);
+  });
+  rankingBody.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      let tr = e.target.closest("tr");
+      if (!tr) return;
+      const nombre = tr.dataset.nombre;
+      if (!nombre) return;
+      showDetails(nombre);
+    }
+  });
+
+  // Mostrar detalle de puntos para una hermana
+  function showDetails(nombre) {
+    detailsBody.innerHTML = "";
+    const user = data.find((d) => d.nombre === nombre);
+    if (!user) return;
+    if (user.detalles.length === 0) {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 3;
+      td.textContent = "No hay registros de puntos para esta hermana.";
+      td.style.fontStyle = "italic";
+      tr.appendChild(td);
+      detailsBody.appendChild(tr);
+    } else {
+      user.detalles.forEach((det) => {
+        const tr = document.createElement("tr");
+        const tdFecha = document.createElement("td");
+        tdFecha.textContent = det.fecha;
+        const tdPuntos = document.createElement("td");
+        tdPuntos.textContent = det.puntos > 0 ? "+" + det.puntos : det.puntos;
+        tdPuntos.style.color = det.puntos > 0 ? "green" : "red";
+        const tdMotivo = document.createElement("td");
+        tdMotivo.textContent = det.motivo;
+
+        tr.appendChild(tdFecha);
+        tr.appendChild(tdPuntos);
+        tr.appendChild(tdMotivo);
+        detailsBody.appendChild(tr);
+      });
+    }
+    detailsSection.classList.remove("hidden");
+    detailsSection.focus();
+  }
+  closeDetailsBtn.addEventListener("click", () => {
+    detailsSection.classList.add("hidden");
+  });
+
+  // Render info lista motivos
+  function renderInfoList(ganan = true) {
+    pointsInfoList.innerHTML = "";
+    pointsInfoList.classList.remove("hidden");
+    let motivos = ganan ? puntosGanadosMotivos : puntosPerdidosMotivos;
+    motivos = motivos.slice().sort((a,b) => b.puntos - a.puntos);
+    motivos.forEach((item) => {
+      const p = document.createElement("p");
+      p.textContent = `${ganan ? "+" : "-"}${item.puntos} pts - ${item.motivo}`;
+      pointsInfoList.appendChild(p);
+    });
+  }
+
+  // Botones mostrar info
+  showPointsInfoBtn.addEventListener("click", () => {
+    const expanded = showPointsInfoBtn.getAttribute("aria-expanded") === "true";
+    if (expanded) {
+      pointsInfoList.classList.add("hidden");
+      showPointsInfoBtn.setAttribute("aria-expanded", "false");
+      showPointsInfoBtn.textContent = "¿Cómo se ganan puntos?";
+      showPointsLostBtn.textContent = "¿Cómo se pierden puntos?";
+    } else {
+      renderInfoList(true);
+      pointsInfoList.classList.remove("hidden");
+      showPointsInfoBtn.setAttribute("aria-expanded", "true");
+      showPointsInfoBtn.textContent = "Ocultar motivos que ganan puntos";
+      showPointsLostBtn.textContent = "¿Cómo se pierden puntos?";
+      showPointsLostBtn.setAttribute("aria-expanded", "false");
+      pointsInfoList.style.border = `2px solid var(--verde)`;
+    }
+  });
+  showPointsLostBtn.addEventListener("click", () => {
+    const expanded = showPointsLostBtn.getAttribute("aria-expanded") === "true";
+    if (expanded) {
+      pointsInfoList.classList.add("hidden");
+      showPointsLostBtn.setAttribute("aria-expanded", "false");
+      showPointsLostBtn.textContent = "¿Cómo se pierden puntos?";
+      showPointsInfoBtn.textContent = "¿Cómo se ganan puntos?";
+    } else {
+      renderInfoList(false);
+      pointsInfoList.classList.remove("hidden");
+      showPointsLostBtn.setAttribute("aria-expanded", "true");
+      showPointsLostBtn.textContent = "Ocultar motivos que pierden puntos";
+      showPointsInfoBtn.textContent = "¿Cómo se ganan puntos?";
+      showPointsInfoBtn.setAttribute("aria-expanded", "false");
+      pointsInfoList.style.border = `2px solid var(--rojo)`;
+    }
+  });
+
+  // Carga inicial
+  window.addEventListener('load', loadData);
+  detailsSection.classList.add("hidden");
+  pointsInfoList.classList.add("hidden");
+
+})();
+</script>
+</body>
+</html>
