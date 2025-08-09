@@ -376,34 +376,43 @@
   });
 
   // Mostrar detalle de puntos para una hermana
-  function showDetails(nombre) {
+ function showDetails(nombre) {
     detailsBody.innerHTML = "";
     const user = data.find((d) => d.nombre === nombre);
     if (!user) return;
+    
     if (user.detalles.length === 0) {
-      const tr = document.createElement("tr");
-      const td = document.createElement("td");
-      td.colSpan = 3;
-      td.textContent = "No hay registros de puntos para esta hermana.";
-      td.style.fontStyle = "italic";
-      tr.appendChild(td);
-      detailsBody.appendChild(tr);
-    } else {
-      user.detalles.forEach((det) => {
         const tr = document.createElement("tr");
-        const tdFecha = document.createElement("td");
-        tdFecha.textContent = det.fecha;
-        const tdPuntos = document.createElement("td");
-        tdPuntos.textContent = det.puntos > 0 ? "+" + det.puntos : det.puntos;
-        tdPuntos.style.color = det.puntos > 0 ? "green" : "red";
-        const tdMotivo = document.createElement("td");
-        tdMotivo.textContent = det.motivo;
-
-        tr.appendChild(tdFecha);
-        tr.appendChild(tdPuntos);
-        tr.appendChild(tdMotivo);
+        const td = document.createElement("td");
+        td.colSpan = 3;
+        td.textContent = "No hay registros de puntos para esta hermana.";
+        td.style.fontStyle = "italic";
+        tr.appendChild(td);
         detailsBody.appendChild(tr);
-      });
+    } else {
+        user.detalles.forEach((det) => {
+            const tr = document.createElement("tr");
+            const tdFecha = document.createElement("td");
+            // ¡Aquí está la magia! ✨
+            const fechaLegible = new Date(det.fecha).toLocaleDateString('es-ES', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            tdFecha.textContent = fechaLegible;
+            
+            const tdPuntos = document.createElement("td");
+            tdPuntos.textContent = det.puntos > 0 ? "+" + det.puntos : det.puntos;
+            tdPuntos.style.color = det.puntos > 0 ? "green" : "red";
+            
+            const tdMotivo = document.createElement("td");
+            tdMotivo.textContent = det.motivo;
+
+            tr.appendChild(tdFecha);
+            tr.appendChild(tdPuntos);
+            tr.appendChild(tdMotivo);
+            detailsBody.appendChild(tr);
+        });
     }
     detailsSection.classList.remove("hidden");
     detailsSection.focus();
